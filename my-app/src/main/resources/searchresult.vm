@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>User Application</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'  type='text/css'>
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+<style type="text/css">
+.readonlyStyle {
+	background: none;
+	border: none;
+	outline: none;
+	
+}
+</style>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$("#fnamesearch").show();
+		$("#lnamesearch").hide();
+		$("#emailsearch").hide();
+		$("#alertresult").hide();
+		
+		
+		$("#s_fname").click(function() {
+			$("#fnamesearch").show();
+			$("#lnamesearch").hide();
+			$("#emailsearch").hide();
+		});
+		$("#s_lname").click(function() {
+			$("#fnamesearch").hide();
+			$("#lnamesearch").show();
+			$("#emailsearch").hide();
+		});
+		$("#s_email").click(function() {
+			$("#fnamesearch").hide();
+			$("#lnamesearch").hide();
+			$("#emailsearch").show();
+		});
+		
+		$(".btn-info").click(function() {
+			//$(this).parent().parent();
+			 var dsbutton = $(this);
+			 var $row = dsbutton.closest("tr");
+			 var userId = $row.children('td.userid').text();
+             var $tds = $row.find("input");
+             alert("User Id" + userId)    
+			if($(this).text() == "Update"){
+				dsbutton.text("Save");
+				 $.each($tds, function () {             
+	                 $(this).removeAttr("readonly");
+	                 $(this).removeClass("readonlyStyle");
+	             });
+			}else{
+					 var query = 'updateUsers?userId='+userId + '&';
+					 
+					 $.each($tds, function () {  
+						 $(this).attr("readonly");
+		                 $(this).addClass("readonlyStyle");
+		                 var name = $(this).attr("name");
+		                 var val = $(this).val();
+		                 if (name !== null || val !== undefined) {
+		                     query = query + name + "=" + val + "&";
+		                 }
+					 });
+					 alert("query ::" +query);
+					 jQuery.ajax({
+	                        url: query,
+	                        success: function (result) {
+	                        alert(" result : " + result);
+	                        	if(result === 'failure'){
+	                        		$("#alertresult").show();
+                        			$("#alertresult #msg").empty().append("Some error occurred");
+                        			$row.css("background-color", "#FE7728");
+                        			$.each($tds, function () {             
+                   	                 $(this).removeAttr("readonly");
+                   	                 $(this).removeClass("readonlyStyle");
+                   	             });
+                        		}else{
+	                        		dsbutton.text("Update");
+	                        		$("#alertresult").show();
+		                        	$("#alertresult #msg").empty().append("User"+ userId+" successfully!!!");
+		                        	$row.css("background-color", "#B3FF80");
+		                        	$.each($tds, function () {             
+                   	                 	$(this).addClass("readonlyStyle");
+                   	                 	$(this).attr('readonly', 'readonly');
+                   	             	});
+	                        	}
+	                        	 
+	                        },
+	                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+	           			     $("#alertresult").show();
+                        	 $("#alertresult #msg").empty().append("Some error occurred");
+	           			  },
+	                        async: true
+	                    });
+				}
+            
+		});
+		
+	});
+</script>
+</head>
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/">MyUserApp</a>
+			</div>
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="/">Home</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container">
+		<h2>User form</h2>
+		<!-- Search User Form Panel -->
+		
+		<div class="row col-md-12">
+      	<div class="panel panel-info">
+	      <div class="panel-heading">Search User
+	      	<label class="radio-inline"><input type="radio" checked
+							name="optradio" id="s_fname">First name:</label> 
+							<label
+							class="radio-inline"><input type="radio" name="optradio"
+							id="s_lname">Last Name</label> 
+							<label
+							class="radio-inline"><input type="radio" name="optradio"
+							id="s_email">Email</label>
+	      </div>
+	      <div class="panel-body">
+		 <!--Search User Form -->
+		  <form class="form-horizontal" role="form" action="/getAllUsers">
+		  	<div class="form-group" id="fnamesearch">
+			  <label class="control-label col-sm-2" for="fname">First Name:</label>
+			  <div class="col-sm-4">
+			  <i class="icon-search"></i>
+				<input type="text" class="form-control" name="fname" id="fname" placeholder="Search By First Name">
+			  </div>
+			   <div class="col-sm-2">
+				<button type="submit" class="btn btn-info">
+		          <span class="glyphicon glyphicon-search"></span> Search
+		        </button>
+			  </div>
+			</div>
+			
+			<div class="form-group" id="lnamesearch">
+			  <label class="control-label col-sm-2" for="lname">Last Name:</label>
+			  <div class="col-sm-4">
+			  <i class="icon-search"></i>
+				<input type="text" class="form-control" name="lname" id="lname" placeholder="Search By Last Name">
+			  </div>
+			   <div class="col-sm-2">
+				<button type="submit" class="btn btn-info">
+		          <span class="glyphicon glyphicon-search"></span> Search
+		        </button>
+			  </div>
+			</div>
+			
+			<div class="form-group" id="emailsearch">
+			  <label class="control-label col-sm-2" for="fname">Email:</label>
+			 <div class="col-sm-4">
+			  
+				<input type="text" class="form-control" name="email" id="email" placeholder="Search By  Email id">
+			  </div>
+			   <div class="col-sm-2">
+				<button type="submit" class="btn btn-info">
+		          <span class="glyphicon glyphicon-search"></span> Search
+		        </button>
+			  </div>
+			</div>
+							
+			<div class="form-group">        
+			 
+			</div>
+		  </form>
+		  <!-- End :Search  User Form -->
+		 </div>
+	    </div>
+	    <!-- End : Search User Form Panel-->
+		<!-- User Form Panel -->
+      	<div class="panel panel-info">
+      	
+	      <div class="panel-heading">Search Result</div>
+	      <div class="panel-body">
+	      <div class="alert alert-info" id="alertresult">
+      		  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			  <strong id="msg"></strong> 
+			</div>
+	      #if ($users.size()==0)
+      		<div class="alert alert-warning">
+      		  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			  <strong>Sorry!</strong> No record found.
+			</div>
+		  #else
+		  	<!--User Form -->
+		  	<div class="table-responsive">  
+			<table class="table table-hover">
+			<thead>
+			 <tr>
+				<th>User Id</th>
+				<th>Firstname</th>
+				<th>Lastname</th>
+				<th>Email</th>
+				<th>Street</th>
+				<th>City</th>
+				<th>Zip</th>
+				<th>State</th>
+				<th>Country</th>
+				<th>Company</th>
+				<th>Website</th>
+				<th>Date Updated</th>
+				
+			  </tr>
+			  </thead>
+			 <tbody>
+			 #foreach( $user in $users )
+			 	<tr>
+			  		<td class="userid">$user.id</td>
+					<td><input name="t_fname" type="text" class="readonlyStyle" readonly value="$user.fname" required /></td>
+					<td><input name="t_lname" type="text" class="readonlyStyle" readonly value="$user.lname" required /></td>
+					<td><input name="t_emailid" type="text" class="readonlyStyle" readonly value="$user.emailid" required /></td>
+					<td><input name="t_street" type="text" class="readonlyStyle" readonly value="$user.street" required /></td>
+					<td><input name="t_city" type="text" class="readonlyStyle" readonly value="$user.city" required /></td>
+					<td><input name="t_zip" type="text" class="readonlyStyle" readonly value="$user.zip" required /></td>
+					<td><input name="t_state" type="text" class="readonlyStyle" readonly value="$user.state" required /></td>
+					<td><input name="t_country" type="text" class="readonlyStyle" readonly value="$user.country" required /></td>
+					<td><input name="t_company" type="text" class="readonlyStyle" readonly value="$user.companyName" required /></td>
+					<td><input name="t_company_url" type="text" class="readonlyStyle" readonly value="$user.companyUrl" required /></td>
+					<td>$user.dateCreated</td>
+					<td><button type="button" class="btn btn-info btn-xs" onClick="">Update</button></td>
+				</tr>
+			 #end
+			 </tbody>
+		  </table>
+		  </div>
+	     <!-- End : User Form Panel-->
+		  #end
+		</div>
+		
+	</div>
+
+</body>
+</html>

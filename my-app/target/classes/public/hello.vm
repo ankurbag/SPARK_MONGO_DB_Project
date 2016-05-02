@@ -1,0 +1,15 @@
+<html>
+<body>
+Hello ${hello}!
+Hello ${person.Name}!
+
+<ul>
+  #set($start = 0)
+#set($end = 4)
+#set($range = [$start..$end])
+#foreach($i in $range)
+   <li>$i</li>
+#end
+</ul> 
+</body>
+</html>
