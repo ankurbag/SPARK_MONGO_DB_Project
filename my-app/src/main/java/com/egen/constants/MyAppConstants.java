@@ -24,7 +24,7 @@ public interface MyAppConstants {
 	String FIELD_FIRST_NAME = "firstName";
 	String FIELD_LAST_NAME = "lastName";
 	String FIELD_EMAIL_ID = "email";
-	String FIELD_USER_ID = "id";
+	String FIELD_USER_ID = "_id";
 	String FIELD_ADDR ="address";
 	String FIELD_STREET ="street";
 	String FIELD_CITY ="city";
@@ -36,5 +36,7 @@ public interface MyAppConstants {
 	String FIELD_COMPANY_NAME="name";
 	String FIELD_COMPANY_WEBSITE="website";
 	String FIELD_PROFILE_PIC="profilePic";
+	String PROFILE_URL ="http://icons.iconarchive.com/icons/icons-land/vista-people/128/Office-Customer-Male-Light-icon.png";
+	
 	
 }

@@ -27,12 +27,11 @@ public class MainController {
      * Map holding the users
      */
     private static Map<String, Object> userRecord = new HashMap<String, Object>();
-
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 		 final Random random = new Random();
 		staticFileLocation("public"); //index.html is served at localhost:4567 (default port)
         //Creates a new User resource, will return the ID to the created resource
-        get("/createUser", (request, response) -> {
+        post("/createUser", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
      	   //get current date time with Date()
@@ -48,17 +47,15 @@ public class MainController {
             String country = request.queryParams("country");
             String companyName = request.queryParams("company_name");
             String companyUrl = request.queryParams("company_url");
+            String profilePic = MyAppConstants.PROFILE_URL;
             
-            System.out.println("fname :"+fname);
             User user = new 
             		User(fname, lname, emailid, street, city, zip, state, country, companyName, companyUrl,dateFormat.format(date));
             
-            int id = random.nextInt(Integer.MAX_VALUE);
-            userRecord.put("id", id);
+            String id = ""+System.currentTimeMillis();
+            userRecord.put("_id", id);
             userRecord.put("firstName", user.getFname());
             userRecord.put("lastName", user.getLname());
-            userRecord.put("email", user.getEmailid());
-            userRecord.put("email", user.getEmailid());
             userRecord.put("email", user.getEmailid());
             //Add Address
             Map<String, Object> addressMap = new HashMap<String, Object>();
@@ -76,10 +73,10 @@ public class MainController {
             companyMap.put("website", user.getCompanyUrl());
             userRecord.put("company", companyMap);
             userRecord.put("dateCreated",user.getDateCreated());
-            DAO.createUser(userRecord);
+            userRecord.put("profilePic",profilePic);
+            String msg = DAO.createUser(userRecord);
             response.status(201); // 201 Created
-            request.attribute("id", id);
-            model.put("id", id);
+            model.put("msg", msg);
             //response.redirect("/index.jsp?id="+id);
             // The vm files are located under the resources directory
             return new ModelAndView(model, "home.vm");

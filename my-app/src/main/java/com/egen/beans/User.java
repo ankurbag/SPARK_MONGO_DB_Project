@@ -20,7 +20,7 @@ public class User {
 	
 
 	/**Attributes **/
-	private long id;
+	private String id;
 	/**
 	 * @param fname
 	 * @param lname
@@ -71,8 +71,23 @@ public class User {
 	private String companyName;
 	private String companyUrl;
 	private String dateCreated;
+	private String profilePic;
 	
 	
+	/**
+	 * @return the profilePic
+	 */
+	public String getProfilePic() {
+		return profilePic;
+	}
+
+	/**
+	 * @param profilePic the profilePic to set
+	 */
+	public void setProfilePic(String profilePic) {
+		this.profilePic = profilePic;
+	}
+
 	/**
 	 * @return the dateCreated
 	 */
@@ -188,14 +203,14 @@ public class User {
 	/**
 	 * @return the id
 	 */
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

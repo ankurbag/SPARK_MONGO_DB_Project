@@ -30,6 +30,7 @@
 		$("#lnamesearch").hide();
 		$("#emailsearch").hide();
 		$("#alertresult").hide();
+		$("#alerterror").hide();
 		
 		
 		$("#s_fname").click(function() {
@@ -48,7 +49,7 @@
 			$("#emailsearch").show();
 		});
 		
-		$(".btn-info").click(function() {
+		$(".btn-xs").click(function() {
 			//$(this).parent().parent();
 			 var dsbutton = $(this);
 			 var $row = dsbutton.closest("tr");
@@ -73,14 +74,13 @@
 		                     query = query + name + "=" + val + "&";
 		                 }
 					 });
-					 alert("query ::" +query);
 					 jQuery.ajax({
 	                        url: query,
 	                        success: function (result) {
-	                        alert(" result : " + result);
 	                        	if(result === 'failure'){
-	                        		$("#alertresult").show();
-                        			$("#alertresult #msg").empty().append("Some error occurred");
+	                        		$("#alerterror").show();
+	                        		$("#alertresult").hide();
+                        			$("#alerterror #msg").empty().append("Some error occurred on field validation");
                         			$row.css("background-color", "#FE7728");
                         			$.each($tds, function () {             
                    	                 $(this).removeAttr("readonly");
@@ -89,7 +89,8 @@
                         		}else{
 	                        		dsbutton.text("Update");
 	                        		$("#alertresult").show();
-		                        	$("#alertresult #msg").empty().append("User"+ userId+" successfully!!!");
+	                        		$("#alerterror").hide();
+		                        	$("#alertresult #msg").empty().append("User "+ userId+" updated successfully!!!");
 		                        	$row.css("background-color", "#B3FF80");
 		                        	$.each($tds, function () {             
                    	                 	$(this).addClass("readonlyStyle");
@@ -99,8 +100,10 @@
 	                        	 
 	                        },
 	                        error: function(XMLHttpRequest, textStatus, errorThrown) {
-	           			     $("#alertresult").show();
-                        	 $("#alertresult #msg").empty().append("Some error occurred");
+	           			     $("#alerterror").show();
+	                         $("#alertresult").hide();
+                        	 $("#alerterror #msg").empty().append("Some error occurred on AJAX call");
+                        	
 	           			  },
 	                        async: true
 	                    });
@@ -197,6 +200,10 @@
       		  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			  <strong id="msg"></strong> 
 			</div>
+			 <div class="alert alert-warning" id="alerterror">
+      		  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			  <strong id="msg"></strong> 
+			</div>
 	      #if ($users.size()==0)
       		<div class="alert alert-warning">
       		  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -208,6 +215,7 @@
 			<table class="table table-hover">
 			<thead>
 			 <tr>
+			 	<th>Profile</th>
 				<th>User Id</th>
 				<th>Firstname</th>
 				<th>Lastname</th>
@@ -226,6 +234,7 @@
 			 <tbody>
 			 #foreach( $user in $users )
 			 	<tr>
+			 		<td ><img src="$user.profilePic" class="img-circle img-responsive" ></td>
 			  		<td class="userid">$user.id</td>
 					<td><input name="t_fname" type="text" class="readonlyStyle" readonly value="$user.fname" required /></td>
 					<td><input name="t_lname" type="text" class="readonlyStyle" readonly value="$user.lname" required /></td>

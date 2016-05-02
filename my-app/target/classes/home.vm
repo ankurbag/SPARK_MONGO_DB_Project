@@ -121,10 +121,15 @@
 	    <!-- End : Search User Form Panel-->
 		<!-- User Form Panel -->
       	<div class="panel panel-info">
-      	#if ($id != "")
+      	#if ($msg == "success")
       		<div class="alert alert-success">
       		  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			  <strong>Success!</strong> New User with id : $id has been added.
+			  <strong>Success!</strong> New User created successfully.
+			</div>
+		 #else
+		  	<div class="alert alert-danger">
+      		  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			  <strong>Sorry!</strong> User cannot be created.
 			</div>
 		 #end
 	      <div class="panel-heading">Add User</div>
