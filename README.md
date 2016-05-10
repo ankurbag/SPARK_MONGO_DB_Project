@@ -1,4 +1,4 @@
-# egen-be-challenge
+# SPARK / MONGO db project
 A restful web service for User Management application using Spark Java and MongoDB
 
 Tools Used :
